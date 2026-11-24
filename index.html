@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0616" />
+  <title>Happy Birthday Nimra ✦ Sterio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Fixed background canvas (stars + fireworks). Never intercepts clicks. -->
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+
+  <!-- Floating gifts layer -->
+  <div id="giftLayer" aria-hidden="true"></div>
+
+  <!-- One switch for all sound -->
+  <button class="sound-toggle" id="soundBtn" type="button" aria-pressed="false" aria-label="Mute the soundtrack">
+    <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H2v6h4l5 4z" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+    </svg>
+    <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H2v6h4l5 4z" />
+      <line x1="22" y1="9" x2="16" y2="15" />
+      <line x1="16" y1="9" x2="22" y2="15" />
+    </svg>
+    <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="sound-name" id="soundName">Salvatore</span>
+  </button>
+
+  <main id="app" class="app" aria-live="polite">
+
+    <!-- Scene 0 : Welcome (Audio Unlock) -->
+    <section class="scene active" data-scene="0" aria-label="Start">
+      <div class="content">
+        <p class="top-tag">November 23  •  9:00 PM</p>
+        <h1 class="title">Happy Birthday Nimra <span class="inline-emoji" aria-hidden="true">✨</span></h1>
+        <p class="subtitle">It's 9 PM — the hour that always belonged to us.
+Ready for your birthday surprise?</p>
+        <button class="btn primary" id="startBtn" type="button">
+          Begin <span class="inline-emoji" aria-hidden="true">🎁</span>
+        </button>
+        <p class="microhint">Tip: enable sound for the full experience.</p>
+      </div>
+    </section>
+
+    <!-- Scene 1 : The Memories -->
+    <section class="scene" data-scene="1" aria-label="Memories">
+      <div class="content">
+        <h2 class="headline">Some nights never really ended</h2>
+        <div class="memory-stack" aria-label="Memories">
+          <p class="memory" data-step="1">From the sixth of April to the twenty-seventh of November <span aria-hidden="true">🌌</span></p>
+          <p class="memory" data-step="2">Every 9 PM conversation that turned into a star <span aria-hidden="true">💫</span></p>
+          <p class="memory" data-step="3">Distance changed nothing — you still shine in my sky <span aria-hidden="true">🤍</span></p>
+        </div>
+        <button class="btn primary" id="memoriesNextBtn" type="button">
+          Next <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Scene 2 : The Dreamer's Planet (Saturn Card) -->
+    <section class="scene" data-scene="2" aria-label="The Dreamer's Planet">
+      <div class="content">
+        <h2 class="headline">The Dreamer's Planet <span class="inline-emoji" aria-hidden="true">🪐</span></h2>
+        <p class="subtitle dim"><em>“Of all the planets, she loved the one with rings.”</em></p>
+
+        <div class="saturn-wrap" aria-hidden="true">
+          <div class="saturn">
+            <div class="saturn-rings"></div>
+            <div class="saturn-body"></div>
+          </div>
+        </div>
+
+        <div class="quote-stack" aria-label="Quiet sentences">
+          <p class="quote-card" data-step="1">“Some stars go quiet — but their light keeps traveling through the dark.”</p>
+          <p class="quote-card" data-step="2">“The sky never really loses a star. It only learns to love her from farther away.”</p>
+          <p class="quote-card" data-step="3">“No expectations, no noise. You were, and always will be, my favorite 9 PM.”</p>
+        </div>
+
+        <button class="btn primary" id="saturnNextBtn" type="button">
+          Make a Wish <span class="inline-emoji" aria-hidden="true">🎂</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Scene 3 : Birthday Cake & Candle -->
+    <section class="scene" data-scene="3" aria-label="Cake and candle">
+      <div class="content">
+        <h2 class="headline">November 23</h2>
+        <p class="subtitle dim">Close your eyes, make a wish,
+and blow out the candle (or tap the flame).</p>
+
+        <div class="cake-stage" role="group" aria-label="Birthday cake interaction">
+          <div class="cake">
+            <div class="cake-top"></div>
+            <div class="cake-body"></div>
+            <div class="cake-shadow"></div>
+            <div class="candle" id="candle" role="button" tabindex="0" aria-label="Blow out the candle">
+              <div class="wick"></div>
+              <div class="flame" id="flame" aria-hidden="true"></div>
+              <div class="candle-body"></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn ghost" id="continueBtn" type="button" disabled>
+          Read Your Letter <span aria-hidden="true">💌</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Scene 4 : The 3D Letter -->
+    <section class="scene" data-scene="4" aria-label="Envelope and letter">
+      <div class="content">
+        <div class="envelope-stage">
+          <button class="envelope" id="envelope" type="button" aria-label="Open the letter">
+            <span class="env-back" aria-hidden="true"></span>
+            <span class="env-front" aria-hidden="true"></span>
+            <span class="env-flap" aria-hidden="true"></span>
+            <span class="env-seal" aria-hidden="true"></span>
+            <span class="letter" id="letter">
+              <span class="letter-inner">
+                <span class="letter-title">Dear Nimra,</span>
+                <span class="letter-body">
+                  <span class="line">Some stories never really end — they just learn to live quietly among the stars.</span>
+                  <span class="line">From the sixth of April, every 9 PM became a small universe. And even now, when the clock touches nine, the sky still feels like it's waiting for something familiar.</span>
+                  <span class="line">Tonight asks nothing of you — no expectations, no noise. Just one quiet wish: that your birthday is as soft as your heart, and that this year is gentle with you in ways the last one wasn't.</span>
+                  <span class="line">You always loved the planet with rings. They say its rings are made of countless little moons that never left. Some things simply keep circling — silently, patiently, beautifully.</span>
+                  <span class="line">Happy Birthday, Nimra. Keep shining, dreamer. The sky was always yours.</span>
+                </span>
+                <span class="letter-sign">
+                  Yours, Ayaz <span aria-hidden="true">🪐</span>
+                  <small>(somewhere under the same sky)</small>
+                </span>
+              </span>
+            </span>
+          </button>
+          <p class="microhint dim">Tap the envelope to open.</p>
+        </div>
+
+        <button class="btn primary" id="creditsBtn" type="button">
+          Roll The Credits <span aria-hidden="true">✦</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Scene 5 : Movie End Credits (Eternal Sky) -->
+    <section class="scene scene-credits" data-scene="5" aria-label="End credits">
+      <div class="content credits-wrapper" id="creditsWrapper">
+        <div class="credits-roll" id="creditsRoll">
+
+          <div class="credit-block">
+            <h2 class="credits-title credits-hero">✦ NIMRA ✦</h2>
+            <span class="credits-label" style="margin-top:10px;">a birthday production</span>
+          </div>
+
+          <div class="credit-quote"><p>in a sky full of strangers,
+one of them had a name.</p></div>
+
+          <div class="credit-block name-block">
+            <span class="name-kicker">the world called her</span>
+            <span class="name-real">NIMRA</span>
+            <span class="name-rule"></span>
+            <span class="the-name">STERIO</span>
+            <span class="name-rule"></span>
+            <span class="name-foot">a name only one person was ever allowed to say.</span>
+          </div>
+
+          <div class="credit-block name-block">
+            <span class="name-kicker">the world called him</span>
+            <span class="name-real">AYAZ</span>
+            <span class="name-rule"></span>
+            <span class="the-name">PRECIOUS</span>
+            <span class="name-rule"></span>
+            <span class="name-foot">a name only she ever said — and only she said it right.</span>
+          </div>
+
+          <div class="credit-quote"><p>two names, two people.
+nobody else was ever in that room.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the game</span>
+            <p class="credits-val">Ludo Titan</p>
+            <span class="credits-sub">a board, a dice, and a stranger's turn</span>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the beginning</span>
+            <p class="credits-val">April 6</p>
+          </div>
+
+          <div class="credit-quote"><p>he didn't know a game
+would turn into a person.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the exchange</span>
+            <p class="credits-val">Snapchat · April 18</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">then</span>
+            <p class="credits-val">one message. then ten. then a thousand.</p>
+          </div>
+
+          <div class="credit-quote"><p>some people don't arrive.
+they just quietly stop being strangers.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the titles, in order</span>
+            <div class="ladder">
+              <span>friends</span>
+              <span>best friends</span>
+              <span>bestest friends</span>
+              <span>more than friends</span>
+              <span>everything</span>
+            </div>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the hour</span>
+            <p class="credits-val">9:00 PM</p>
+            <span class="credits-sub">the hour that belonged to no one else</span>
+          </div>
+
+          <div class="credit-quote"><p>every night at nine,
+the sky opened.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the ritual</span>
+            <p class="credits-val">two dots typing at 9:00 PM</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the language</span>
+            <p class="credits-val">voice notes, half-sleep, terrible jokes</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the good mornings</span>
+            <p class="credits-val">that always arrived at night</p>
+          </div>
+
+          <div class="credit-block name-block twin">
+            <span class="name-kicker">starring</span>
+            <span class="the-name">STERIO</span>
+            <span class="twin-amp">&amp;</span>
+            <span class="the-name">PRECIOUS</span>
+            <span class="name-foot">a universe that fitted inside a screen.</span>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">her planet</span>
+            <p class="credits-val">Saturn 🪐</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">her season</span>
+            <p class="credits-val">Sagittarius ♐</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">her colours</span>
+            <p class="credits-val">lilac · midnight blue · starlight</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">her laugh</span>
+            <p class="credits-val">the reason 9 PM existed</p>
+          </div>
+
+          <div class="credit-quote"><p>she loved the planet with rings —
+the one that never lets its moons go.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">screenplay</span>
+            <p class="credits-val">every 9 PM, unscripted</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">soundtrack</span>
+            <p class="credits-val">Salvatore</p>
+            <span class="credits-sub">Lana Del Rey</span>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">runtime</span>
+            <p class="credits-val">April 6 — November 27</p>
+          </div>
+
+          <div class="credit-quote"><p>and then, quietly,
+the misunderstandings came.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the last conversation</span>
+            <p class="credits-val">November 27</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the distance</span>
+            <p class="credits-val">measured in silence, not in miles</p>
+          </div>
+
+          <div class="credit-quote"><p>he knocked for a long time.
+some doors close softly, and still make a sound.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">no expectations</span>
+            <p class="credits-val">and no noise</p>
+          </div>
+
+          <div class="credit-quote"><p>this is not a plea.
+it is a birthday wish.</p></div>
+
+          <div class="credit-block">
+            <span class="credits-label">the birthday</span>
+            <p class="credits-val">November 23</p>
+          </div>
+
+          <div class="credit-quote"><p>he still knows the exact
+sound of her name.</p></div>
+
+          <div class="credit-block name-block">
+            <span class="name-kicker">still, in every quiet</span>
+            <span class="name-real">NIMRA</span>
+            <span class="name-rule"></span>
+            <span class="the-name">STERIO</span>
+            <span class="name-rule"></span>
+            <span class="name-foot">the name he never gave back.</span>
+          </div>
+
+          <div class="credit-quote"><p>no star ever truly leaves the sky.
+some just shine from far away.</p></div>
+
+          <div class="credit-quote"><p>saturn keeps its rings.
+the sky keeps its people.</p></div>
+
+          <div class="credit-block name-block twin">
+            <span class="name-kicker">a story only two people ever knew</span>
+            <span class="the-name">STERIO</span>
+            <span class="twin-amp">&amp;</span>
+            <span class="the-name">PRECIOUS</span>
+            <span class="name-foot">written in the dark, between two clocks.</span>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the wish</span>
+            <p class="credits-val">that this year is gentle with you</p>
+          </div>
+
+          <div class="credit-block">
+            <span class="credits-label">the sky</span>
+            <p class="credits-val">still the same one, above both of us</p>
+          </div>
+
+          <div class="credit-quote"><p>and when the clock touches nine,
+somewhere, it is still ours.</p></div>
+
+          <div class="credit-block credit-final">
+            <p class="credits-director">Directed by Ayaz</p>
+            <span class="credits-sub">known, once, as PRECIOUS</span>
+          </div>
+
+          <div class="credit-block credit-final">
+            <p class="credits-end">Happy Birthday, Nimra.</p>
+            <span class="credits-label" style="margin-top:10px;">keep shining, Sterio</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- After the credits: only sky remains, then these quiet lines, one by one -->
+      <div class="sky-finale" id="skyFinale" aria-hidden="true">
+        <p class="finale-line">some stars go quiet — the sky keeps them anyway.</p>
+        <p class="finale-line"><b>STERIO</b> &nbsp;&amp;&nbsp; <b>PRECIOUS</b></p>
+        <p class="finale-line">9 PM will always be ours.</p>
+      </div>
+
+      <!-- The very last thing she sees -->
+      <div class="grand-finale" id="grandFinale" aria-hidden="true">
+        <span class="grand-star" aria-hidden="true">✦</span>
+        <span class="grand-kicker">Happy Birthday</span>
+        <span class="grand-name">Nimra</span>
+        <span class="grand-rule" aria-hidden="true"></span>
+        <span class="grand-sub">November 23 &nbsp;·&nbsp; 9:00 PM &nbsp;·&nbsp; always</span>
+      </div>
+
+      <!-- Subtitles: the song keeps playing, the words keep coming -->
+      <div class="lyrics-stage" id="lyricsStage" aria-hidden="true">
+        <p class="lyric-line ghost" id="lyricPrev"></p>
+        <p class="lyric-line current" id="lyricNow" aria-live="polite">♪</p>
+        <p class="lyric-line ghost" id="lyricNext"></p>
+        <div class="lyrics-meta">
+          <span class="lyrics-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="lyrics-track" id="lyricsTrack">Salvatore · Lana Del Rey</span>
+          <span class="lyrics-progress" aria-hidden="true"><i id="lyricsBar"></i></span>
+        </div>
+      </div>
+
+      <div class="sky-controls" id="skyControls">
+        <button class="btn ghost sky-btn" id="lyricsToggle" type="button">
+          Hide lyrics
+        </button>
+        <button class="btn ghost sky-btn" id="replayBtn" type="button">
+          Replay Sky <span aria-hidden="true">↺</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Soundtrack. Keep the file name exactly: moonlight.mp3 (same folder as this file) -->
+  <audio id="bgm" src="./moonlight.mp3" preload="auto" loop></audio>
+
+  <script type="module" src="./script.js"></script>
+  <script>
+    /* Opening index.html straight from a folder (file://) blocks module scripts.
+       If the page did not boot, load script.js the classic way instead. */
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (window.__nimraBooted) return;
+        var s = document.createElement('script');
+        s.src = './script.js';
+        s.onerror = function () {};
+        document.body.appendChild(s);
+      }, 150);
+    });
+  </script>
+</body>
+</html>
